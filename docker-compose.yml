@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: backend
+    image: backend:v1
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - ./app:/app
+    networks:
+      - localnet
+    command: sh -c /scripts/dev/run_django.sh
+  frontend:
+    image: backend:v1
+    container_name: frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./app:/app
+    networks:
+      - localnet
+    depends_on:
+      - backend
+    command: sh -c /scripts/dev/run_react.sh
+networks:
+  localnet:
